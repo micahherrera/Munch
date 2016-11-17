@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Munch</string>
+    <string name="lat">lat</string>
+    <string name="longitude">long</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="action_share">Cher it!</string>
+    <string name="action_send">I can feel something</string>
+    <string name="action_sonny">Babe, I got you babe</string>
+</resources>
