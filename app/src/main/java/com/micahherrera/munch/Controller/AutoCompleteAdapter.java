@@ -1,20 +1,25 @@
 package com.micahherrera.munch.Controller;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 
+import com.micahherrera.munch.Model.RetrofitFactoryYelp;
 import com.micahherrera.munch.Model.contract.YelpApi3;
 import com.micahherrera.munch.Model.data.AutoComplete;
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Category;
 import com.micahherrera.munch.Model.data.Term;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +38,17 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
     private AutoComplete autoComplete;
     private YelpApi3 yelp;
     private String token;
+    private Map map;
 
-    public AutoCompleteAdapter(Context context, YelpApi3 yelpApi3, String token) {
+    public AutoCompleteAdapter(Context context, String token, String latitude, String longitude) {
         mContext = context;
-        yelp = yelpApi3;
         this.token = token;
+        map = new HashMap();
+        map.put("latitude", latitude);
+        map.put("longitude", longitude);
+
+        RetrofitFactoryYelp factoryYelp = new RetrofitFactoryYelp();
+        yelp = factoryYelp.getInstance();
     }
 
     @Override
@@ -62,7 +73,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(android.R.layout.simple_dropdown_item_1line, parent, false);
         }
-       // ((TextView) convertView.findViewById(R.id.text1)).setText(getItem(position));
+        ((TextView) convertView.findViewById(android.R.id.text1)).setText(getItem(position));
 
         return convertView;
     }
@@ -75,7 +86,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
 
-                   // autoComplete = findTerms(mContext, constraint.toString());
+                    autoComplete= findTerms(map, constraint.toString());
                     List<Term> termList = autoComplete.getTerms();
                     List<Business> businessList = autoComplete.getBusinesses();
                     List<Category> categoryList = autoComplete.getCategories();
@@ -93,6 +104,7 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
                     filterResults.count = resultList.size();
+
                 }
                 return filterResults;
             }
@@ -112,25 +124,19 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
     /**
      * Returns a search result for the given book title.
      */
-    private AutoComplete findTerms(Context context, Map params) {
+    private AutoComplete findTerms(Map params, String text) {
+        resultList = new ArrayList<>();
 
-        final AutoComplete autoComplete;
-        Call<AutoComplete> call = yelp.autoComplete(params, token);
-        retrofit2.Callback<AutoComplete> callback = new retrofit2.Callback<AutoComplete>() {
+        params.put("text", text);
+        Call<AutoComplete> call = yelp.autoComplete(params, "Bearer " + token);
+        Response<AutoComplete> response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("TAG", "findTerms: couldnt find them");
+        }
+        return response.body();
 
-            @Override
-            public void onResponse(Call<AutoComplete> call, Response<AutoComplete> response) {
-               // autoComplete = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<AutoComplete> call, Throwable t) {
-
-            }
-
-        };
-
-        call.enqueue(callback);
-        return null;
     }
 }

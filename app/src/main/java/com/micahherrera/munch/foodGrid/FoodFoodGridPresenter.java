@@ -17,7 +17,6 @@ import com.micahherrera.munch.Model.DownloadUrlTask;
 import com.micahherrera.munch.Model.LocationService;
 import com.micahherrera.munch.Model.RetrofitFactoryYelp;
 import com.micahherrera.munch.Model.SearchYelpResponse;
-import com.micahherrera.munch.Model.contract.GridActivityContract;
 import com.micahherrera.munch.Model.contract.YelpApi3;
 import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.Model.data.TokenO;
@@ -38,7 +37,8 @@ import retrofit2.Response;
  * Created by micahherrera on 10/17/16.
  */
 
-public class FoodGridPresenter implements GridActivityContract{
+public class FoodFoodGridPresenter implements FoodGridPresenterContract {
+
     private YelpApi3 yelpApi3;
     private FoodGridActivity activity;
     private CoordinateOptions coordinate;
@@ -64,7 +64,7 @@ public class FoodGridPresenter implements GridActivityContract{
 
     public static final int SETTINGS_RETURN = 1;
 
-    public FoodGridPresenter(FoodGridActivity activity, FoodGridView view){
+    public FoodFoodGridPresenter(FoodGridActivity activity, FoodGridView view){
         this.activity = activity;
         this.view=view;
 
@@ -297,6 +297,10 @@ public class FoodGridPresenter implements GridActivityContract{
 
     public void goToSettings(){
 
+        settingsBundle.putString("token",
+                activity.getSharedPreferences(SHARED_PREFERENCES, 0).getString(OAUTH_PREFS, null));
+        settingsBundle.putString("latitude", Double.toString(coordinate.latitude()));
+        settingsBundle.putString("longitude", Double.toString(coordinate.longitude()));
         Intent intent = new Intent(activity, SettingsActivity.class);
         intent.putExtra("bundle", settingsBundle);
         activity.startActivityForResult(intent, SETTINGS_RETURN);
@@ -313,5 +317,6 @@ public class FoodGridPresenter implements GridActivityContract{
     public void onFoodLoaded(List<Food> foodList){
         Collections.shuffle(foodList);
         view.renderFoods(foodList);
+
     }
 }

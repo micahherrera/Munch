@@ -25,7 +25,7 @@ import java.util.List;
 public class FoodGridActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, FoodGridView{
 
-    private FoodGridPresenter foodGridPresenter;
+    private FoodFoodGridPresenter foodGridPresenter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private GridAdapter adapter;
@@ -40,7 +40,7 @@ public class FoodGridActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progressBarGrid);
         recyclerView = (RecyclerView)findViewById(R.id.grid_recycler);
         textError=(TextView)findViewById(R.id.textError);
-        foodGridPresenter = new FoodGridPresenter(this, this);
+        foodGridPresenter = new FoodFoodGridPresenter(this, this);
         foodGridPresenter.getNearby();
 
     }
@@ -74,13 +74,13 @@ public class FoodGridActivity extends AppCompatActivity
         progressBar.setVisibility(View.GONE);
         textError.setVisibility(View.VISIBLE);
         textError.setText(errorMessage);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_grid, menu);
-
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -104,7 +104,6 @@ public class FoodGridActivity extends AppCompatActivity
             Bundle bundle = data.getBundleExtra("bundle");
             foodGridPresenter.newSettings(bundle);
 
-
         }
     }
 
@@ -117,6 +116,7 @@ public class FoodGridActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         progressBar.setVisibility(View.GONE);
+
     }
 
     @Override

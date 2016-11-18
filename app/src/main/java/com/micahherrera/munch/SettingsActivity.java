@@ -14,7 +14,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.micahherrera.munch.foodGrid.FoodGridPresenter;
+import com.micahherrera.munch.Controller.AutoCompleteAdapter;
+import com.micahherrera.munch.Controller.SettingsAutoComplete;
+import com.micahherrera.munch.foodGrid.FoodFoodGridPresenter;
+
+import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -30,12 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
     private ToggleButton priceThree;
     private ToggleButton priceFour;
 
-    private AutoCompleteTextView searchTerm;
+    private SettingsAutoComplete searchTerm;
     private AutoCompleteTextView location;
     private SeekBar distanceSeekbar;
     private Switch openNowSwitch;
     private TextView distanceDisplay;
     private String locationString;
+    private String token;
+    private Map autoCompleteMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         distanceSeekbar = (SeekBar) findViewById(R.id.distance_seek_bar);
         openNowSwitch = (Switch) findViewById(R.id.open_now_switch);
         openNowSwitch.setChecked(false);
-        searchTerm = (AutoCompleteTextView) findViewById(R.id.settings_search_text);
+        searchTerm = (SettingsAutoComplete) findViewById(R.id.settings_search_text);
         priceOne = (ToggleButton) findViewById(R.id.price_button_1);
         priceTwo = (ToggleButton) findViewById(R.id.price_button_2);
         priceThree = (ToggleButton) findViewById(R.id.price_button_3);
@@ -59,6 +65,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         setupSeekbar();
         unpackSettingsBundle();
+
+        searchTerm.setThreshold(3);
 
 
 
@@ -144,6 +152,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (bundle.getInt("$$$$") == 1) {
             priceFour.setChecked(true);
         }
+
+        token = bundle.getString("token");
+
+        searchTerm.setAdapter(new AutoCompleteAdapter(this, token, Float.toString(latitude),
+                Float.toString(longitude)));
     }
 
     private void sendSettingsBundle(){
@@ -171,7 +184,7 @@ public class SettingsActivity extends AppCompatActivity {
         bundle.putString("open_now", (openNowSwitch.isChecked() ? "true" : "false"));
         Intent returnIntent = new Intent();
         returnIntent.putExtra("bundle", bundle);
-        setResult(FoodGridPresenter.SETTINGS_RETURN, returnIntent);
+        setResult(FoodFoodGridPresenter.SETTINGS_RETURN, returnIntent);
         finish();
 
     }
