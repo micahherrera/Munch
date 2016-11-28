@@ -1,4 +1,4 @@
-package com.micahherrera.munch.foodGrid;
+package com.micahherrera.munch.foodgrid;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.micahherrera.munch.businessdetail.BusinessDetailActivity;
 import com.micahherrera.munch.Controller.GridAdapter;
 import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.R;
@@ -25,7 +26,7 @@ import java.util.List;
 public class FoodGridActivity extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback, FoodGridView{
 
-    private FoodFoodGridPresenter foodGridPresenter;
+    private FoodGridPresenterContract foodGridPresenter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private GridAdapter adapter;
@@ -40,7 +41,7 @@ public class FoodGridActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progressBarGrid);
         recyclerView = (RecyclerView)findViewById(R.id.grid_recycler);
         textError=(TextView)findViewById(R.id.textError);
-        foodGridPresenter = new FoodFoodGridPresenter(this, this);
+        foodGridPresenter = new FoodGridPresenter(this, this);
         foodGridPresenter.getNearby();
 
     }
@@ -100,7 +101,7 @@ public class FoodGridActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == foodGridPresenter.SETTINGS_RETURN){
+        if (resultCode == foodGridPresenter.getSettingsReturn()){
             Bundle bundle = data.getBundleExtra("bundle");
             foodGridPresenter.newSettings(bundle);
 
@@ -120,7 +121,13 @@ public class FoodGridActivity extends AppCompatActivity
     }
 
     @Override
-    public void navigateToBusiness(String businessId) {
+    public void navigateToBusiness(Food food) {
+        Intent intent = new Intent(this, BusinessDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("name_id", food.getFoodId());
+        bundle.putString("image_url", food.getFoodPic());
+        intent.putExtras(bundle);
+        startActivity(intent);
 
     }
 }

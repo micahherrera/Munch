@@ -4,7 +4,7 @@
     android:id="@+id/activity_grid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.micahherrera.munch.foodGrid.FoodGridActivity">
+    tools:context="com.micahherrera.munch.foodgrid.FoodGridActivity">
 
     <TextView
         android:id="@+id/textError"

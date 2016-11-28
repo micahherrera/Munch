@@ -1,4 +1,4 @@
-package com.micahherrera.munch.foodGrid;
+package com.micahherrera.munch.foodgrid;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.micahherrera.munch.Model.DownloadUrlTask;
 import com.micahherrera.munch.Model.LocationService;
 import com.micahherrera.munch.Model.RetrofitFactoryYelp;
 import com.micahherrera.munch.Model.SearchYelpResponse;
@@ -37,7 +36,7 @@ import retrofit2.Response;
  * Created by micahherrera on 10/17/16.
  */
 
-public class FoodFoodGridPresenter implements FoodGridPresenterContract {
+public class FoodGridPresenter implements FoodGridPresenterContract {
 
     private YelpApi3 yelpApi3;
     private FoodGridActivity activity;
@@ -64,7 +63,7 @@ public class FoodFoodGridPresenter implements FoodGridPresenterContract {
 
     public static final int SETTINGS_RETURN = 1;
 
-    public FoodFoodGridPresenter(FoodGridActivity activity, FoodGridView view){
+    public FoodGridPresenter(FoodGridActivity activity, FoodGridView view){
         this.activity = activity;
         this.view=view;
 
@@ -296,7 +295,6 @@ public class FoodFoodGridPresenter implements FoodGridPresenterContract {
     }
 
     public void goToSettings(){
-
         settingsBundle.putString("token",
                 activity.getSharedPreferences(SHARED_PREFERENCES, 0).getString(OAUTH_PREFS, null));
         settingsBundle.putString("latitude", Double.toString(coordinate.latitude()));
@@ -306,6 +304,12 @@ public class FoodFoodGridPresenter implements FoodGridPresenterContract {
         activity.startActivityForResult(intent, SETTINGS_RETURN);
 
     }
+
+    @Override
+    public int getSettingsReturn() {
+        return SETTINGS_RETURN;
+    }
+
 
     @Override
     public void newSettings(Bundle bundle) {

@@ -16,7 +16,7 @@ import android.widget.ToggleButton;
 
 import com.micahherrera.munch.Controller.AutoCompleteAdapter;
 import com.micahherrera.munch.Controller.SettingsAutoComplete;
-import com.micahherrera.munch.foodGrid.FoodFoodGridPresenter;
+import com.micahherrera.munch.foodgrid.FoodGridPresenter;
 
 import java.util.Map;
 
@@ -184,7 +184,7 @@ public class SettingsActivity extends AppCompatActivity {
         bundle.putString("open_now", (openNowSwitch.isChecked() ? "true" : "false"));
         Intent returnIntent = new Intent();
         returnIntent.putExtra("bundle", bundle);
-        setResult(FoodFoodGridPresenter.SETTINGS_RETURN, returnIntent);
+        setResult(FoodGridPresenter.SETTINGS_RETURN, returnIntent);
         finish();
 
     }

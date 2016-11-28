@@ -6,10 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.micahherrera.munch.BusinessDetailActivity;
+import com.micahherrera.munch.businessdetail.BusinessDetailActivity;
 import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.R;
-import com.micahherrera.munch.foodGrid.FoodGridActivity;
+import com.micahherrera.munch.foodgrid.FoodGridActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class GridHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public void onClick(View view) {
         int position = getAdapterPosition();
         Food food = foodArrayList.get(position);
-        goToDetailView(food);
+        foodGridActivity.navigateToBusiness(food);
     }
 
     public void putThePhoto(String url, int width){

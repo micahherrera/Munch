@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.R;
-import com.micahherrera.munch.foodGrid.FoodGridActivity;
+import com.micahherrera.munch.foodgrid.FoodGridActivity;
 
 import java.util.List;
 

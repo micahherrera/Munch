@@ -1,4 +1,4 @@
-package com.micahherrera.munch.foodGrid;
+package com.micahherrera.munch.foodgrid;
 
 import com.micahherrera.munch.Model.data.Food;
 
@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface FoodGridView {
     void renderFoods(List<Food> foodList);
-    void navigateToBusiness(String businessId);
+    void navigateToBusiness(Food food);
 }

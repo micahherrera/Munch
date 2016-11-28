@@ -1,11 +1,10 @@
-package com.micahherrera.munch.Model;
+package com.micahherrera.munch.foodgrid;
 
 import android.os.AsyncTask;
 
 import com.micahherrera.munch.Model.contract.YelpApi3;
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Food;
-import com.micahherrera.munch.foodGrid.FoodFoodGridPresenter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,9 +24,9 @@ public class DownloadUrlTask extends AsyncTask<List<Business>, Void, Void> {
 
     YelpApi3 yelpAPI;
     ArrayList<Food> foodList;
-    FoodFoodGridPresenter presenter;
+    FoodGridPresenterContract presenter;
 
-    public DownloadUrlTask(YelpApi3 yelpAPI, FoodFoodGridPresenter presenter){
+    public DownloadUrlTask(YelpApi3 yelpAPI, FoodGridPresenterContract presenter){
         this.yelpAPI=yelpAPI;
         this.presenter=presenter;
     }
@@ -44,7 +43,6 @@ public class DownloadUrlTask extends AsyncTask<List<Business>, Void, Void> {
             try {
                 Document doc = Jsoup.connect("http://www.yelp.com/biz_photos/" + b.getId() +
                         "?tab=food").get();
-                //Log.d("TAG", "doInBackground: "+ doc.body().toString());
                 Elements all = doc.getAllElements();
                 Pattern p = Pattern.compile("(?is)\"src_high_res\": \"(.+?)\"");
                 Matcher m = p.matcher(all.toString());
