@@ -1,6 +1,6 @@
 package com.micahherrera.munch.Model.contract;
 
-import com.micahherrera.munch.Model.SearchYelpResponse;
+import com.micahherrera.munch.Model.data.SearchYelpResponse;
 import com.micahherrera.munch.Model.data.AutoComplete;
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.TokenO;

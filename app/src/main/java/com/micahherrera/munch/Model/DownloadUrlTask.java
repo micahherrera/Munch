@@ -1,8 +1,7 @@
-package com.micahherrera.munch.foodgrid;
+package com.micahherrera.munch.Model;
 
 import android.os.AsyncTask;
 
-import com.micahherrera.munch.Model.contract.YelpApi3;
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Food;
 
@@ -22,13 +21,11 @@ import java.util.regex.Pattern;
 
 public class DownloadUrlTask extends AsyncTask<List<Business>, Void, Void> {
 
-    YelpApi3 yelpAPI;
     ArrayList<Food> foodList;
-    FoodGridPresenterContract presenter;
+    private BusinessDataSource.LoadFoodListCallback mCallback;
 
-    public DownloadUrlTask(YelpApi3 yelpAPI, FoodGridPresenterContract presenter){
-        this.yelpAPI=yelpAPI;
-        this.presenter=presenter;
+    public DownloadUrlTask(BusinessDataSource.LoadFoodListCallback callback){
+        mCallback = callback;
     }
 
     @Override
@@ -62,6 +59,6 @@ public class DownloadUrlTask extends AsyncTask<List<Business>, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        presenter.onFoodLoaded(foodList);
+        mCallback.onFoodListLoaded(foodList);
     }
 }

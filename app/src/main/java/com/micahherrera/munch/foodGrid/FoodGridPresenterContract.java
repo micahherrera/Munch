@@ -12,12 +12,9 @@ import java.util.List;
 
 public interface FoodGridPresenterContract {
     void getNearby();
-    void unregister();
-    boolean checkConnection();
-    void checkPermissions();
-    void onPermissionGranted();
     void setupYelp();
     void oauthYelp();
+    void getCoordinates(Bundle bundle);
     void goToSettings();
     int getSettingsReturn();
     void newSettings(Bundle bundle);

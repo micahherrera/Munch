@@ -1,4 +1,4 @@
-package com.micahherrera.munch.Controller;
+package com.micahherrera.munch.utils;
 
 import android.content.Context;
 import android.util.Log;

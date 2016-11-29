@@ -1,9 +1,8 @@
 
-package com.micahherrera.munch.Model;
+package com.micahherrera.munch.Model.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.micahherrera.munch.Model.data.Business;
 
 import java.util.ArrayList;
 import java.util.List;

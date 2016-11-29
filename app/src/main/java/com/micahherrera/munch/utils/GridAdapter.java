@@ -1,4 +1,4 @@
-package com.micahherrera.munch.Controller;
+package com.micahherrera.munch.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

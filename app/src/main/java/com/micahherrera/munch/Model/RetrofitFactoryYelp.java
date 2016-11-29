@@ -2,7 +2,6 @@ package com.micahherrera.munch.Model;
 
 import com.micahherrera.munch.Model.contract.YelpApi3;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -13,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactoryYelp {
     public static String BASE_URL = "https://api.yelp.com";
     public static YelpApi3 service;
-    private OkHttpClient httpClient;
+    public static String sToken;
 
     public static YelpApi3 getInstance(){
         if(service == null){
@@ -25,6 +24,14 @@ public class RetrofitFactoryYelp {
         } else {
             return service;
         }
+    }
+
+    public static String getToken(){
+        return sToken;
+    }
+
+    public static void setToken(String token){
+        sToken = token;
     }
 }
 

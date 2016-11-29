@@ -1,4 +1,4 @@
-package com.micahherrera.munch.Controller;
+package com.micahherrera.munch.utils;
 
 import android.content.Intent;
 import android.os.Bundle;

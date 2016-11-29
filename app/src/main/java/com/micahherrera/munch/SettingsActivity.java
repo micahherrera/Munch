@@ -14,8 +14,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.micahherrera.munch.Controller.AutoCompleteAdapter;
-import com.micahherrera.munch.Controller.SettingsAutoComplete;
+import com.micahherrera.munch.utils.AutoCompleteAdapter;
+import com.micahherrera.munch.utils.SettingsAutoComplete;
 import com.micahherrera.munch.foodgrid.FoodGridPresenter;
 
 import java.util.Map;

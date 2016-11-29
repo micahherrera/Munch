@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.micahherrera.munch.Model.BusinessDataSource;
+import com.micahherrera.munch.Model.DataRepository;
 import com.micahherrera.munch.Model.data.Business;
+import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.R;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import com.wangjie.androidbucket.utils.imageprocess.ABShape;
@@ -28,6 +31,7 @@ private RapidFloatingActionLayout rfaLayout;
 private RapidFloatingActionButton rfaBtn;
 private RapidFloatingActionHelper rfabHelper;
     private BusinessDetailContract.Presenter presenter;
+    private BusinessDataSource mRepo;
 
 
     @Override
@@ -35,7 +39,9 @@ private RapidFloatingActionHelper rfabHelper;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_detail);
 
-        presenter = new BusinessDetailPresenter(this);
+        mRepo = new DataRepository();
+
+        presenter = new BusinessDetailPresenter(this, mRepo);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
@@ -114,12 +120,17 @@ private RapidFloatingActionHelper rfabHelper;
 
 
     @Override
-    public void showBusinessDetails(Business business) {
+    public void showBusinessDetails(Business business, List<Food> foodList) {
 
     }
 
     @Override
     public void showNoBusinessDetails(String errorMessage) {
+
+    }
+
+    @Override
+    public void showNoFoodListDetails(String errorMessage) {
 
     }
 }

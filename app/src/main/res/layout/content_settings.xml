@@ -24,7 +24,7 @@
 
         />
 
-    <com.micahherrera.munch.Controller.SettingsAutoComplete
+    <com.micahherrera.munch.utils.SettingsAutoComplete
         android:layout_below="@id/searchTermsText"
         android:id="@+id/settings_search_text"
         android:layout_width="match_parent"

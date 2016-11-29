@@ -131,7 +131,7 @@ public class LocationService extends Service implements GoogleApiClient.OnConnec
         LocationServices.FusedLocationApi.requestLocationUpdates(client, request, new LocationListener() {
             @Override
             public void onLocationChanged(Location locations) {
-                Log.d("TAG", "onLocationChanged: "+locations.getLatitude());
+                Log.d("TAG", "onLocationChanged: "+locations.getLatitude() + locations.getLongitude());
                 getLocation(locations);
             }
 
