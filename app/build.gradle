@@ -18,10 +18,6 @@ android {
         }
     }
 
-//        dexOptions {
-//            preDexLibraries = false
-//        }
-
 
     packagingOptions {
 
@@ -47,6 +43,7 @@ dependencies {
 
     compile 'com.nineoldandroids:library:2.4.0'
 
+    compile 'com.jakewharton:butterknife:8.4.0'
 
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'

@@ -2,6 +2,7 @@ package com.micahherrera.munch.businessdetail;
 
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Food;
+import com.micahherrera.munch.Model.data.Review;
 
 import java.util.List;
 
@@ -13,11 +14,13 @@ public interface BusinessDetailContract {
 
     interface View {
 
-        void showBusinessDetails(Business business, List<Food> foodList);
+        void showBusinessDetails(Business business, List<Food> foodList, List<Review> reviewList);
 
         void showNoBusinessDetails(String errorMessage);
 
         void showNoFoodListDetails(String errorMessage);
+
+        void showNoReviewListDetails(String errorMessage);
 
     }
 

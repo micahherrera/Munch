@@ -2,6 +2,7 @@ package com.micahherrera.munch.Model;
 
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Food;
+import com.micahherrera.munch.Model.data.Review;
 
 import java.util.List;
 
@@ -32,7 +33,14 @@ public interface BusinessDataSource {
         void onError(String error);
     }
 
+    interface LoadReviewListCallback {
 
+        void onReviewListLoaded(List<Review> reviewList);
+
+        void onError(String error);
+    }
+
+    void loadBusinessReviews(String businessId, LoadReviewListCallback callback);
 
     void loadBusiness(String businessId, LoadBusinessCallback callback);
 

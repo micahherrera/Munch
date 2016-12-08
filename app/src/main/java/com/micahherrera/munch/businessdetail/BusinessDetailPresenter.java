@@ -3,6 +3,7 @@ package com.micahherrera.munch.businessdetail;
 import com.micahherrera.munch.Model.BusinessDataSource;
 import com.micahherrera.munch.Model.data.Business;
 import com.micahherrera.munch.Model.data.Food;
+import com.micahherrera.munch.Model.data.Review;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class BusinessDetailPresenter implements BusinessDetailContract.Presenter
     }
 
     @Override
-    public void loadBusiness(String businessId) {
+    public void loadBusiness(final String businessId) {
         mRepo.loadBusiness(businessId, new BusinessDataSource.LoadBusinessCallback() {
             @Override
             public void onBusinessLoaded(final Business business) {
@@ -33,8 +34,20 @@ public class BusinessDetailPresenter implements BusinessDetailContract.Presenter
                 mRepo.loadFoodList(businessList, new BusinessDataSource.LoadFoodListCallback() {
 
                     @Override
-                    public void onFoodListLoaded(List<Food> foodList) {
-                        mView.showBusinessDetails(business, foodList);
+                    public void onFoodListLoaded(final List<Food> foodList) {
+                        mRepo.loadBusinessReviews(businessId,
+                                new BusinessDataSource.LoadReviewListCallback() {
+                            @Override
+                            public void onReviewListLoaded(List<Review> reviewList) {
+                                mView.showBusinessDetails(business, foodList, reviewList);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                mView.showNoReviewListDetails(error);
+                            }
+                        });
+
                     }
 
                     @Override

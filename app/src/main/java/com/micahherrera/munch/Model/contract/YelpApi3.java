@@ -1,8 +1,9 @@
 package com.micahherrera.munch.Model.contract;
 
-import com.micahherrera.munch.Model.data.SearchYelpResponse;
 import com.micahherrera.munch.Model.data.AutoComplete;
 import com.micahherrera.munch.Model.data.Business;
+import com.micahherrera.munch.Model.data.Reviews;
+import com.micahherrera.munch.Model.data.SearchYelpResponse;
 import com.micahherrera.munch.Model.data.TokenO;
 
 import java.util.Map;
@@ -34,5 +35,9 @@ public interface YelpApi3 {
     @GET("v3/autocomplete")
     Call<AutoComplete> autoComplete(@QueryMap Map<String, String> params,
                                     @Header("Authorization") String token);
+
+    @GET("v3/businesses/{id}/reviews")
+    Call<Reviews> getReviews(@Path("id") String businessId,
+                             @Header("Authorization") String token);
 
 }

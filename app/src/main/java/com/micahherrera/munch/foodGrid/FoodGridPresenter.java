@@ -1,26 +1,15 @@
 package com.micahherrera.munch.foodgrid;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.micahherrera.munch.Model.LocationService;
+import com.micahherrera.munch.Model.BusinessDataSource;
 import com.micahherrera.munch.Model.RetrofitFactoryYelp;
-import com.micahherrera.munch.Model.SearchYelpResponse;
 import com.micahherrera.munch.Model.contract.YelpApi3;
 import com.micahherrera.munch.Model.data.Food;
+import com.micahherrera.munch.Model.data.SearchYelpResponse;
 import com.micahherrera.munch.Model.data.TokenO;
-import com.micahherrera.munch.R;
-import com.micahherrera.munch.SettingsActivity;
+
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 
 import java.util.Collections;
@@ -39,82 +28,51 @@ import retrofit2.Response;
 public class FoodGridPresenter implements FoodGridPresenterContract {
 
     private YelpApi3 yelpApi3;
-    private FoodGridActivity activity;
+
     private CoordinateOptions coordinate;
-    private BroadcastReceiver broadcastReceiver;
-    private static final String OAUTH_PREFS = "oauth";
-    private static final String SHARED_PREFERENCES = "preferences";
+
     private static final String CLIENT_ID = "rDxkzZTw8i-o95rVKz2FWA";
+
     private static final String CLIENT_SECRET =
             "k1Q1tmaMtRip75s2KBOgQ37fLuUs92ycFX9oOiudnkt97c3wXbVA3hum96S4g4dM";
+
     private static final String locationError = "There was an error getting a geographical location. " +
             "Tap here to manually enter your whereabouts.";
+
     private static final String oauthError = "There was an error with authentification. " +
             "Contact developer.";
+
     private static final String yelpSearchError = "There was an error with your search." +
             " Please try again.";
-    private static final String connectionError = "There was an internet connection error. " +
-            "Please check your wifi connection.";
+
     private Bundle settingsBundle = new Bundle();
 
     private FoodGridView view;
 
-    public String token;
+    private BusinessDataSource mRepo;
 
     public static final int SETTINGS_RETURN = 1;
 
-    public FoodGridPresenter(FoodGridActivity activity, FoodGridView view){
-        this.activity = activity;
-        this.view=view;
+    public FoodGridPresenter(FoodGridView view, BusinessDataSource repo){
+        this.view = view;
+        mRepo = repo;
 
     }
 
     public void getNearby(){
-        boolean isConnected = checkConnection();
-        if(isConnected) {
-            checkPermissions();
-
-        }
 
     }
 
-    private void getLocation(){
-        Intent getLocation = new Intent(activity, LocationService.class);
-        getLocation.putExtra("location", "location");
-        activity.startService(getLocation);
 
-    }
 
-    private void setupBroadcastReceiver(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("coordinatesLoaded");
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-
-                Log.i("Receiver", "Broadcast received: " + action);
-
-                if(action.equals("coordinatesLoaded")){
-                    Bundle bundle = intent.getBundleExtra("bundle");
-                    getCoordinates(bundle);
-                    unregister();
-
-                }
-            }
-        };
-        activity.registerReceiver(broadcastReceiver,filter);
-
-    }
-
-    private void getCoordinates(Bundle bundle) {
-        Double mLatitude = bundle.getDouble(activity.getString(R.string.lat));
-        Double mLongitude = bundle.getDouble(activity.getString(R.string.longitude));
+    public void getCoordinates(Bundle bundle) {
+        Double mLatitude = bundle.getDouble("lat");
+        Double mLongitude = bundle.getDouble("long");
 
         if(mLatitude == null || mLongitude == null){
-            activity.setTextError(locationError);
+           view.setTextError(locationError);
         } else {
-            Log.d("TAG", "getCoordinates: " + mLatitude);
+            Log.d("TAG", "getCoordinates: " + mLatitude + mLongitude);
             coordinate = CoordinateOptions.builder()
                     .latitude(mLatitude)
                     .longitude(mLongitude).build();
@@ -147,7 +105,7 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
             public void onFailure(Call<SearchYelpResponse> call, Throwable t) {
                 // HTTP error happened, do something to handle it.
                 Log.d("TAG", "onFailure: ErrorOnSearch" + t.toString());
-                activity.setTextError(yelpSearchError);
+                view.setTextError(yelpSearchError);
 
             }
         };
@@ -190,59 +148,26 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
     private void loadBusinesses(SearchYelpResponse searchYelpResponse){
         Log.d("TAG", "loadBusinesses: "+ searchYelpResponse.getBusinesses().size());
         if(searchYelpResponse.getBusinesses().size() <= 0){
-            activity.setTextError(yelpSearchError);
+            view.setTextError(yelpSearchError);
 
         } else {
-            new DownloadUrlTask(yelpApi3, this).execute(searchYelpResponse.getBusinesses());
+            mRepo.loadFoodList(searchYelpResponse.getBusinesses(), new BusinessDataSource.LoadFoodListCallback() {
+                @Override
+                public void onFoodListLoaded(List<Food> foodList) {
+                    view.renderFoods(foodList);
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
 
         }
     }
 
-    public void unregister(){
-        activity.unregisterReceiver(broadcastReceiver);
 
-    }
-
-    public boolean checkConnection(){
-        ConnectivityManager connMgr = (ConnectivityManager)
-                activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            Log.d("TAG", "onCreate: You are connected");
-            return true;
-
-        } else {
-            Log.d("TAG", "onCreate: You are not connected");
-            activity.setTextError(connectionError);
-            return false;
-
-        }
-
-    }
-
-    public void checkPermissions(){
-        if (ContextCompat.checkSelfPermission(activity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(activity,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]
-                    {android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    FoodGridActivity.REQUEST_LOCATION);
-        } else {
-            Log.d("TAG", "checkPermissions: good");
-            onPermissionGranted();
-
-        }
-    }
-
-    public void onPermissionGranted(){
-        setupBroadcastReceiver();
-        getLocation();
-        setupYelp();
-
-    }
 
     public void setupYelp(){
         RetrofitFactoryYelp factory = new RetrofitFactoryYelp();
@@ -260,12 +185,7 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
             @Override
             public void onResponse(Call<TokenO> call, Response<TokenO> response) {
                 Log.d("TAG", "onResponse: "+response.body().getAccess_token());
-
-                SharedPreferences sp = activity.getSharedPreferences(SHARED_PREFERENCES, 0);
-                SharedPreferences.Editor e = sp.edit();
-                e.putString(OAUTH_PREFS, response.body().getAccess_token());
-                e.commit();
-
+                view.saveToken(response.body().getAccess_token());
                 callYelp(response.body().getAccess_token());
 
             }
@@ -273,21 +193,21 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.d("TAG", "onFailure: no go oauth");
-                activity.setTextError(oauthError);
+                view.setTextError(oauthError);
 
             }
         });
 
     }
 
+
     private boolean isOauthed(){
-        String token = activity.getSharedPreferences(SHARED_PREFERENCES, 0)
-                .getString(OAUTH_PREFS, null);
+        String token = RetrofitFactoryYelp.getToken();
         if(token==null){
             return false;
 
         } else {
-            Log.d("TAG", "isOauthed: noneneeded");
+            Log.d("TAG", "isOauthed: noneneeded" + token);
             callYelp(token);
             return true;
 
@@ -295,26 +215,27 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
     }
 
     public void goToSettings(){
-        settingsBundle.putString("token",
-                activity.getSharedPreferences(SHARED_PREFERENCES, 0).getString(OAUTH_PREFS, null));
+        settingsBundle.putString("token", RetrofitFactoryYelp.getToken());
         settingsBundle.putString("latitude", Double.toString(coordinate.latitude()));
         settingsBundle.putString("longitude", Double.toString(coordinate.longitude()));
-        Intent intent = new Intent(activity, SettingsActivity.class);
-        intent.putExtra("bundle", settingsBundle);
-        activity.startActivityForResult(intent, SETTINGS_RETURN);
+        view.goToSettings(settingsBundle);
 
     }
 
     @Override
     public int getSettingsReturn() {
         return SETTINGS_RETURN;
+
     }
 
 
     @Override
     public void newSettings(Bundle bundle) {
         settingsBundle = bundle;
-        getNearby();
+        if(view.checkConnection()){
+            view.checkPermissions();
+            view.showFoodsLoading();
+        }
 
     }
 

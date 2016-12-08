@@ -1,4 +1,4 @@
-package com.micahherrera.munch.utils;
+package com.micahherrera.munch.foodgrid.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,27 +16,27 @@ import java.util.List;
  * Created by micahherrera on 10/18/16.
  */
 
-public class GridAdapter extends RecyclerView.Adapter<GridHolder>{
+public class FoodGridRecyclerAdapter extends RecyclerView.Adapter<FoodGridRecyclerHolder>{
     private List<Food> foodArrayList;
     private LayoutInflater inflater;
     private FoodGridActivity foodGridActivity;
     private int width;
 
-    public GridAdapter (List<Food> myFoodArrayList, FoodGridActivity foodGridActivity, int width){
+    public FoodGridRecyclerAdapter(List<Food> myFoodArrayList, FoodGridActivity foodGridActivity, int width){
         foodArrayList = myFoodArrayList;
         this.foodGridActivity = foodGridActivity;
         this.width = width;
     }
 
     @Override
-    public GridHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FoodGridRecyclerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = inflater.from(parent.getContext()).inflate(R.layout.item_grid, parent, false);
-        GridHolder gridHolder = new GridHolder(v, foodGridActivity, foodArrayList);
-        return gridHolder;
+        FoodGridRecyclerHolder foodGridRecyclerHolder = new FoodGridRecyclerHolder(v, foodGridActivity, foodArrayList);
+        return foodGridRecyclerHolder;
     }
 
     @Override
-    public void onBindViewHolder(GridHolder holder, int position) {
+    public void onBindViewHolder(FoodGridRecyclerHolder holder, int position) {
         //width = (int) foodGridActivity.getResources().getDimension(R.dimen.grid_cell_width);
         holder.putThePhoto(foodArrayList.get(position).getFoodPic(), ((width-8)/3));
         Log.d("TAG", "onBindViewHolder: " + foodArrayList.get(position).getFoodPic());

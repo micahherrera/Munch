@@ -1,4 +1,4 @@
-package com.micahherrera.munch.utils;
+package com.micahherrera.munch.foodgrid.adapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.micahherrera.munch.businessdetail.BusinessDetailActivity;
 import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.R;
+import com.micahherrera.munch.businessdetail.BusinessDetailActivity;
 import com.micahherrera.munch.foodgrid.FoodGridActivity;
 import com.squareup.picasso.Picasso;
 
@@ -18,13 +18,13 @@ import java.util.List;
  * Created by micahherrera on 10/18/16.
  */
 
-public class GridHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class FoodGridRecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     private FoodGridActivity foodGridActivity;
     private List<Food> foodArrayList;
     private ImageView imageView;
     public View root;
 
-    public GridHolder(View itemView, FoodGridActivity foodGridActivity, List<Food> foodArrayList) {
+    public FoodGridRecyclerHolder(View itemView, FoodGridActivity foodGridActivity, List<Food> foodArrayList) {
         super(itemView);
         this.foodGridActivity = foodGridActivity;
         this.foodArrayList=foodArrayList;
