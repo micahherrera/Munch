@@ -12,7 +12,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="380dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -27,8 +27,8 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
-            <ImageView
-                android:id="@+id/event_detail_image"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/business_detail_food_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

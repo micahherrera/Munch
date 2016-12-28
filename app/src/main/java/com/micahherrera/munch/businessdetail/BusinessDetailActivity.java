@@ -3,6 +3,7 @@ package com.micahherrera.munch.businessdetail;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.micahherrera.munch.Model.data.Food;
 import com.micahherrera.munch.Model.data.Review;
 import com.micahherrera.munch.R;
 
+import com.micahherrera.munch.businessdetail.adapter.FoodRecyclerAdapter;
 import com.micahherrera.munch.businessdetail.adapter.ReviewRecyclerAdapter;
 import com.wangjie.androidbucket.utils.ABTextUtil;
 import com.wangjie.androidbucket.utils.imageprocess.ABShape;
@@ -39,11 +41,15 @@ public class BusinessDetailActivity extends AppCompatActivity
     private BusinessDataSource mRepo;
 
     private ReviewRecyclerAdapter mAdapter;
+    private FoodRecyclerAdapter mFoodRecyclerAdapter;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView mReviewRecycler;
+    private RecyclerView mFoodRecycler;
     private TextView mRatingView;
     private TextView mPriceView;
     private TextView mHoursView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +58,12 @@ public class BusinessDetailActivity extends AppCompatActivity
 
         mRepo = new DataRepository();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.business_detail_recycler);
+        mFoodRecycler = (RecyclerView) findViewById(R.id.business_detail_food_recycler);
+        mReviewRecycler = (RecyclerView) findViewById(R.id.business_detail_recycler);
         mRatingView = (TextView) findViewById(R.id.business_detail_rating);
         mPriceView = (TextView) findViewById(R.id.business_detail_price);
         mHoursView = (TextView) findViewById(R.id.business_detail_hours);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         presenter = new BusinessDetailPresenter(this, mRepo);
 
@@ -64,7 +72,7 @@ public class BusinessDetailActivity extends AppCompatActivity
         String id = bundle.getString("name_id");
         presenter.loadBusiness(id);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
 
         rfaLayout = (RapidFloatingActionLayout) findViewById(R.id.activity_main_rfal);
@@ -140,12 +148,16 @@ public class BusinessDetailActivity extends AppCompatActivity
     @Override
     public void showBusinessDetails(Business business, List<Food> foodList, List<Review> reviewList) {
         mAdapter = new ReviewRecyclerAdapter(reviewList, this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mFoodRecyclerAdapter = new FoodRecyclerAdapter(foodList, this);
+        mReviewRecycler.setAdapter(mAdapter);
+        mReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
         mPriceView.setText(business.getPrice());
         mRatingView.setText(Double.toString(business.getRating()));
         mHoursView.setText(business.getHours().get(0).getOpen().get(0).getStart());
-
+        mFoodRecycler.setAdapter(mFoodRecyclerAdapter);
+        mFoodRecycler.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        collapsingToolbarLayout.setTitle(business.getName());
 
     }
 

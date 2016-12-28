@@ -240,6 +240,7 @@ public class FoodGridPresenter implements FoodGridPresenterContract {
     }
 
     public void onFoodLoaded(List<Food> foodList){
+        Log.d("TAG", "onFoodLoaded: loaded");
         Collections.shuffle(foodList);
         view.renderFoods(foodList);
 

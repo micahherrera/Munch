@@ -4,10 +4,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="8dp"
+    card_view:cardCornerRadius="0dp"
     card_view:paddingEnd="12dp"
     card_view:cardElevation="3dp"
-    android:layout_margin="25dp">
+    android:layout_margin="9dp">
 
     <RelativeLayout
         android:layout_width="match_parent"

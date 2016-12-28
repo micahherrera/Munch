@@ -142,6 +142,7 @@ public class FoodGridActivity extends AppCompatActivity
 
     @Override
     public void renderFoods(List<Food> foodList) {
+        Log.d("TAG", "renderFoods: render");
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         layoutManager = new GridLayoutManager(this, 3);
@@ -203,7 +204,6 @@ public class FoodGridActivity extends AppCompatActivity
         setupBroadcastReceiver();
         foodGridPresenter.setupYelp();
         getLocation();
-
 
     }
 

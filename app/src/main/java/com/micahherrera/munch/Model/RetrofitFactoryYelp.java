@@ -2,6 +2,8 @@ package com.micahherrera.munch.Model;
 
 import com.micahherrera.munch.Model.contract.YelpApi3;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,8 +18,13 @@ public class RetrofitFactoryYelp {
 
     public static YelpApi3 getInstance(){
         if(service == null){
+
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
             Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(new OkHttpClient.Builder().addInterceptor(interceptor).build())
                     .build();
             service = retrofit.create(YelpApi3.class);
             return service;
