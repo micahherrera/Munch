@@ -26,15 +26,6 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/transition_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:src="@mipmap/ic_launcher"
-                android:layout_gravity="center"
-                app:layout_collapseMode="parallax"
-                />
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/business_detail_food_recycler"
