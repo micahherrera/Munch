@@ -148,6 +148,7 @@ public class FoodGridActivity extends AppCompatActivity
         layoutManager = new GridLayoutManager(this, 3);
         adapter = new FoodGridRecyclerAdapter(foodList, this, metrics.widthPixels);
         recyclerView.setAdapter(adapter);
+        layoutManager.setItemPrefetchEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
         progressBar.setVisibility(View.GONE);
 

@@ -68,9 +68,13 @@ public class BusinessDetailActivity extends AppCompatActivity
         presenter = new BusinessDetailPresenter(this, mRepo);
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
-        String id = bundle.getString("name_id");
-        presenter.loadBusiness(id);
+
+            Bundle bundle = intent.getBundleExtra("bundle");
+        if(bundle!=null) {
+            String id = bundle.getString("name_id", null);
+            presenter.loadBusiness(id);
+        }
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -155,8 +159,8 @@ public class BusinessDetailActivity extends AppCompatActivity
         mRatingView.setText(Double.toString(business.getRating()));
         mHoursView.setText(business.getHours().get(0).getOpen().get(0).getStart());
         mFoodRecycler.setAdapter(mFoodRecyclerAdapter);
-        mFoodRecycler.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mFoodRecycler.setLayoutManager(llm);
         collapsingToolbarLayout.setTitle(business.getName());
 
     }
